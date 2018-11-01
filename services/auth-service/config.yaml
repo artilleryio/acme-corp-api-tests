@@ -1,0 +1,35 @@
+config:
+    target: "" # we don't set a target by default
+    environments:
+        # Describe an environment that we'll refer to as "dev". This is the name
+        # we will use with the --environment flag in artillery run command
+        # See https://artillery.io/docs/cli-reference/#run for details
+        dev:
+            # There's a dev deployment of this service on the following URL:
+            target: "https://auth-service-dev.acme-corp.internal"
+            # If we want to set service and environment-specific HTTP headers,
+            # we can do that here as well, e.g. to set an API key that must
+            # be used to access the service.
+            defaults:
+                headers:
+                    x-api-key: "0xcoffee"
+        # We will almost certainly want to run these tests against a copy of the
+        # service running locally, so we define a "local" environment:
+        local:
+            target: "http://localhost:8080"
+    # Tell Artillery to load service-specific custom code
+    processor: "./functions.js"
+    # For our imaginary auth-service, we may use a CSV file with a set of known
+    # valid credentials to test with. This file may or may not actually be stored
+    # in the Git repo (and it may be encrypted at rest if it is) depending on the
+        # security requirements.
+    payload:
+      - path: "./username-password.csv"
+        fields:
+          - username
+          - password
+    #
+    # Any other service-specific configuration goes here, e.g. if there's an
+    # Artillery plugin that we use only for this service's tests, we'd load it
+    # here with the "plugins" attribute.
+    #

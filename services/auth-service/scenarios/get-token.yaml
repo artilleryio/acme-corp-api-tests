@@ -1,0 +1,11 @@
+scenarios:
+  - name: Authenticate with valid credentials and get a token
+    flow:
+      - post:
+          url: "/auth"
+          json:
+            username: "{{ username }}"
+            password: "{{ password }}"
+          expect:
+            - statusCode: 200
+            - contentType: json
